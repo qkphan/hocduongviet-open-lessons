@@ -1,0 +1,18 @@
+name: Build Slides
+
+on:
+  push:
+    paths:
+      - "lessons/**.tex"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Compile slides
+        uses: xu-cheng/latex-action@v2
+        with:
+          root_file: slides.tex
+          working_directory: lessons/toan/lop11/hocduongviet-open-lessons/lessons/toan/lop11/ham-so-mu-va-logarit

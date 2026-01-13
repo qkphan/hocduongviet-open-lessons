@@ -1,0 +1,37 @@
+\ProvidesPackage{hocduongviet}
+\mode<presentation>
+
+\usepackage{amsmath,amssymb,graphicx,tikz}
+
+\definecolor{HDVBlue}{RGB}{30,70,140}
+\definecolor{HDVGray}{RGB}{240,240,240}
+\definecolor{HDVDark}{RGB}{40,40,40}
+
+\setbeamercolor{structure}{fg=HDVBlue}
+\setbeamercolor{normal text}{fg=HDVDark,bg=white}
+
+\setbeamerfont{title}{series=\bfseries,size=\Large}
+\setbeamerfont{frametitle}{series=\bfseries,size=\large}
+
+\setbeamertemplate{title page}{
+  \vfill
+  \begin{center}
+    {\usebeamerfont{title}\color{HDVBlue}\inserttitle\par}
+    \vskip1em
+    {\insertsubtitle\par}
+    \vskip1em
+    {\insertauthor}
+  \end{center}
+  \vfill
+}
+
+\setbeamertemplate{frametitle}{
+  \begin{beamercolorbox}[wd=\paperwidth,ht=2.8ex,dp=1.2ex,leftskip=1em]{frametitle}
+    \insertframetitle
+  \end{beamercolorbox}
+}
+
+\setbeamercolor{block title}{fg=white,bg=HDVBlue}
+\setbeamercolor{block body}{fg=HDVDark,bg=HDVGray}
+
+\setbeamertemplate{navigation symbols}{}
