@@ -23,18 +23,20 @@ prompt = prompt_template.replace("{{SCHEMA}}", schema_text)
 # =========================
 # GEMINI CLIENT
 # =========================
-client = genai.Client(
-    api_key=os.environ["GEMINI_API_KEY"]
-)
+# client = genai.Client(
+#     api_key=os.environ["GEMINI_API_KEY"]
+# )
+genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+model = genai.GenerativeModel("gemini-2.5-flash")
 
 # =========================
 # CALL AI (GEMINI)
 # =========================
-response = client.models.generate_content(
-    model="gemini-2.0-flash",
-    contents=prompt
-)
-
+# response = client.models.generate_content(
+#     model="gemini-2.0-flash",
+#     contents=prompt
+# )
+response = model.generate_content(prompt)
 raw_output = response.text.strip()
 
 print("===== RAW AI OUTPUT =====")
