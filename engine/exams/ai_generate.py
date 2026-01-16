@@ -1,8 +1,7 @@
 import json
 import os
 from pathlib import Path
-# from openai import OpenAI
-import google.generativeai as genai
+from google import genai
 
 # =========================
 # PATHS
@@ -22,36 +21,38 @@ schema_text = SCHEMA_FILE.read_text(encoding="utf-8")
 prompt = prompt_template.replace("{{SCHEMA}}", schema_text)
 
 # =========================
-# OPENAI CLIENT
+# GEMINI CLIENT
 # =========================
-# client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-client = genai.configure(api_key=os.environ["GEMINI_API_KEY"])
-
-# =========================
-# CALL AI
-# =========================
-response = client.chat.completions.create(
-    # model="gpt-4.1",
-    model="gemini-2.5-flash",
-    messages=[
-        {"role": "system", "content": "You generate exam JSON only."},
-        {"role": "user", "content": prompt}
-    ],
-    temperature=0.2
+client = genai.Client(
+    api_key=os.environ["GEMINI_API_KEY"]
 )
 
-raw_output = response.choices[0].message.content.strip()
+# =========================
+# CALL AI (GEMINI)
+# =========================
+response = client.models.generate_content(
+    model="gemini-2.0-flash",
+    contents=prompt
+)
+
+raw_output = response.text.strip()
+
+print("===== RAW AI OUTPUT =====")
+print(raw_output)
+print("=========================")
 
 # =========================
-# SAVE (NO VALIDATION HERE)
+# PARSE JSON
 # =========================
 try:
     data = json.loads(raw_output)
 except json.JSONDecodeError as e:
     print("❌ AI output is not valid JSON")
-    print(raw_output)
     raise e
 
+# =========================
+# SAVE
+# =========================
 OUTPUT_JSON.write_text(
     json.dumps(data, ensure_ascii=False, indent=2),
     encoding="utf-8"
