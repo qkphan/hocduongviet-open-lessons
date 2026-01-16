@@ -35,9 +35,11 @@ client = genai.Client(api_key=api_key)
 # CALL AI
 # =========================
 response = client.models.generate_content(
-    model="gemini-2.5-flash",
+    model="gemini-2.0-flash",
     contents=prompt
 )
+MAX_RETRY = 5
+BACKOFF_BASE = 2  # seconds
 
 raw_output = response.text.strip()
 
