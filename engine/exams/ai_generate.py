@@ -21,28 +21,31 @@ schema_text = SCHEMA_FILE.read_text(encoding="utf-8")
 prompt = prompt_template.replace("{{SCHEMA}}", schema_text)
 
 # =========================
-# GEMINI CLIENT
+# GEMINI CLIENT (NEW API)
 # =========================
-# client = genai.Client(
-#     api_key=os.environ["GEMINI_API_KEY"]
-# )
-genai.configure(api_key=os.environ["GEMINI_API_KEY"])
-model = genai.GenerativeModel("gemini-2.5-flash")
+api_key = os.getenv("GEMINI_API_KEY")
+if not api_key:
+    raise RuntimeError("❌ GEMINI_API_KEY is missing")
+
+client = genai.Client(api_key=api_key)
 
 # =========================
-# CALL AI (GEMINI)
+# CALL AI
 # =========================
-# response = client.models.generate_content(
-#     model="gemini-2.0-flash",
-#     contents=prompt
-# )
-response = model.generate_content(prompt)
+response = client.models.generate_content(
+    model="gemini-2.5-flash",
+    contents=prompt
+)
+
 raw_output = response.text.strip()
 
 print("===== RAW AI OUTPUT =====")
 print(raw_output)
 print("=========================")
 
+# =========================
+# PARSE JSON
+# =========================
 # =========================
 # PARSE JSON
 # =========================
