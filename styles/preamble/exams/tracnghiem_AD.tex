@@ -1,0 +1,21 @@
+\newcommand{\dapAn}[4]{%
+\hspace*{1cm}\textbf{A.} #1; \hspace{2cm}%
+\textbf{B.} #2; \hspace{2cm}%
+\textbf{C.} #3; \hspace{2cm}%
+\textbf{D.} #4.%
+}
+\newcommand{\dapAnl}[4]{%
+\hspace*{1cm}\textbf{A.} #1; \hspace{2cm}%
+\textbf{B.} #2; \hspace{2cm}\\[4pt]%
+\hspace*{1cm}\textbf{C.} #3; \hspace{2cm}%
+\textbf{D.} #4.%
+}
+\newlength{\answerlen}
+\newcommand{\smartDapAn}[4]{%
+\settowidth{\answerlen}{\dapAn{#1}{#2}{#3}{#4}}%
+\ifdim\answerlen>18cm
+    \dapAnl{#1}{#2}{#3}{#4}%
+\else
+    \dapAn{#1}{#2}{#3}{#4}%
+\fi
+}

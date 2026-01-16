@@ -1,0 +1,61 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{examengine}[2026/01/16 Exam Engine Wrapper]
+
+% ==================================================
+% REQUIRE exam class
+% ==================================================
+\RequirePackage{ifthen}
+
+% Flag để hiển thị đáp án
+\newif\ifshowanswers
+\showanswersfalse   % mặc định: KHÔNG hiện đáp án
+
+% Cho phép layout bật đáp án
+\newcommand{\ShowAnswers}{\showanswerstrue}
+\newcommand{\HideAnswers}{\showanswersfalse}
+
+% ==================================================
+% Question counter (wrapper)
+% ==================================================
+\newcounter{enginequestion}
+
+% ==================================================
+% Question Block
+% ==================================================
+\newenvironment{questionblock}
+{
+  \stepcounter{enginequestion}
+  \question
+  \begingroup
+  \begin{choices}
+}
+{
+  \end{choices}
+  \endgroup
+  \vspace{0.5em}
+}
+
+% ==================================================
+% Choice wrapper
+% ==================================================
+\newcommand{\choice}[1]{%
+  \choice #1
+}
+
+% Correct choice
+\newcommand{\correctchoice}[1]{%
+  \ifshowanswers
+    \CorrectChoice #1
+  \else
+    \choice #1
+  \fi
+}
+
+% ==================================================
+% Short Answer (nếu cần)
+% ==================================================
+\newcommand{\shortanswer}[1]{%
+  \ifshowanswers
+    \par\textbf{Đáp án: } #1
+  \fi
+}

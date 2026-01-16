@@ -1,0 +1,146 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{examengine}[2026/01/16 Exam Engine — View Only]
+
+% =================================================
+% PHỤ THUỘC (NHẸ, AN TOÀN)
+% =================================================
+\RequirePackage{etoolbox}
+
+% =================================================
+% META — HEADER
+% Python sẽ gọi đúng 1 lần
+% =================================================
+\newcommand{\ExamMeta}[6]{%
+  \begin{center}
+    \textbf{\MakeUppercase{#1}}\\
+    \textbf{#2}\\[6pt]
+    \textbf{\MakeUppercase{#3}}\\[6pt]
+  \end{center}
+
+  \noindent
+  \textbf{Môn học:} #4 \hfill
+  \textbf{Thời gian:} #5\\
+  \textbf{Mã đề:} #6
+
+  \vspace{12pt}
+  \hrule
+  \vspace{12pt}
+}
+
+% =================================================
+% SECTION
+% =================================================
+\newcommand{\ExamSection}[2]{%
+  \vspace{10pt}
+  \textbf{PHẦN #1.} \textbf{#2}
+  \vspace{6pt}
+}
+
+% =================================================
+% QUESTION COUNTER
+% =================================================
+\newcounter{examquestion}
+
+% =================================================
+% QUESTION TEXT
+% =================================================
+\newcommand{\questiontext}[1]{%
+  \refstepcounter{examquestion}
+  \noindent\textbf{Câu \theexamquestion.}~#1
+}
+
+% =================================================
+% CHOICES (VIEW ONLY)
+% Python sinh đúng thứ tự
+% =================================================
+\newcount\Exam@ChoiceCount
+\Exam@ChoiceCount=0
+
+\newcommand{\Exam@ResetChoices}{%
+  \Exam@ChoiceCount=0
+}
+
+\newcommand{\choice}[1]{%
+  \advance\Exam@ChoiceCount by 1
+  \expandafter\def\csname Exam@Choice@\the\Exam@ChoiceCount\endcsname{#1}
+}
+
+% =================================================
+% RENDER CHOICES
+% DÙNG smartDapAn CỦA BẠN
+% =================================================
+\newcommand{\Exam@RenderChoices}{%
+  \smartDapAn
+    {\csname Exam@Choice@1\endcsname}
+    {\csname Exam@Choice@2\endcsname}
+    {\csname Exam@Choice@3\endcsname}
+    {\csname Exam@Choice@4\endcsname}
+}
+
+% =================================================
+% MCQ ENVIRONMENT
+% =================================================
+\newenvironment{examquestion}{%
+  \Exam@ResetChoices
+  \par\medskip
+}{%
+  \par
+  \Exam@RenderChoices
+  \par\bigskip
+}
+
+% =================================================
+% TRUE / FALSE
+% =================================================
+\newenvironment{examtruefalse}{%
+  \par\medskip
+}{%
+  \par\bigskip
+}
+
+\newcommand{\statement}[1]{%
+  \noindent -- #1\par
+}
+
+% =================================================
+% SHORT ANSWER
+% =================================================
+\newenvironment{examshortanswer}{%
+  \par\medskip
+}{%
+  \par\bigskip
+}
+
+\newcommand{\subquestion}[1]{%
+  \noindent -- #1 \hfill \rule{3cm}{0.4pt}\par
+}
+
+% =================================================
+% ESSAY
+% =================================================
+\newenvironment{examessay}{%
+  \par\medskip
+}{%
+  \vspace{4cm}
+}
+
+\newcommand{\hint}[1]{%
+  \textit{Gợi ý: #1}
+}
+
+% =================================================
+% ADVANCED ESSAY
+% =================================================
+\newenvironment{examadvancedessay}{%
+  \par\medskip
+}{%
+  \vspace{6cm}
+}
+
+\newcommand{\part}[1]{%
+  \noindent\textbf{--} #1\par
+}
+
+% =================================================
+% END
+% =================================================

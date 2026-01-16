@@ -2,8 +2,6 @@ name: Build Slides
 
 on:
   push:
-    paths:
-      - "lessons/**.tex"
 
 jobs:
   build:
@@ -11,8 +9,20 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+       # 🔒 BỔ SUNG: restore exam engine từ GitHub Secrets
+      - name: Restore exam engine
+        run: |
+          mkdir -p private
+          echo "${{ secrets.EXAM_ENGINE }}" | base64 -d > private/examengine.sty
+
       - name: Compile slides
         uses: xu-cheng/latex-action@v2
         with:
           root_file: slides.tex
-          working_directory: lessons/toan/lop11/hocduongviet-open-lessons/lessons/toan/lop11/ham-so-mu-va-logarit
+          working_directory: lessons/toan/lop11/ham-so-mu-va-logarit
+
+      - name: Upload PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: slides-pdf
+          path: lessons/toan/lop11/ham-so-mu-va-logarit/slides.pdf

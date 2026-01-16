@@ -1,0 +1,53 @@
+% \documentclass[a4paper,12pt]{article}
+
+% ===============================
+% PACKAGES - KHÔNG ĐƯỢC THAY ĐỔI
+% ===============================
+\usepackage[utf8]{inputenc}
+\usepackage[vietnamese]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{array,booktabs,multirow}
+\usepackage{enumitem}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+
+\geometry{top=2cm, bottom=2cm, left=2, right=1.5cm}
+
+\setlist[itemize]{noitemsep,topsep=0pt}
+\setlist[enumerate]{noitemsep,topsep=4pt}
+
+% ===============================
+% HEADER & FOOTER
+% ===============================
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{Trang \thepage}
+
+% ===============================
+% MACRO KHÓA CỨNG (CHỈ ĐIỀN)
+% ===============================
+\input{exam_header_macro}
+
+% ===============================
+% MACRO TOÀN BỘ PHẦN I → V
+% ===============================
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+% ----- PHẦN I: Trắc nghiệm nhiều lựa chọn -----
+
+\input{tracnghiem_AD}
+
+% ----- PHẦN II: Trắc nghiệm Đúng / Sai -----
+\input{tracnghiem_DS}
+% ----- PHẦN III: Trả lời ngắn -----
+\input{TL_ngan}
+% ----- PHẦN IV: Tự luận - vận dụng -----
+\input{tuluan_VD}
+% ----- PHẦN V: Tự luận - vận dụng cao -----
+\input{tuluan_VDC}
+% \begin{document}
+% \input{exam_header}
+% \input{..\..\..\..\CAUHOI}
+% \end{document}

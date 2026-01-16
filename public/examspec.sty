@@ -1,0 +1,11 @@
+% examspec.sty
+\ProvidesPackage{examspec}
+
+\newcommand{\MCQuestion}[5]{%
+  % #1: ID
+  % #2: Domain (Hàm số / Xác suất / Logic)
+  % #3: Level (NB / TH / VD / VDC)
+  % #4: Stem
+  % #5: Choices (A|B|C|D)
+  \ExamEngineMC{#1}{#2}{#3}{#4}{#5}
+}

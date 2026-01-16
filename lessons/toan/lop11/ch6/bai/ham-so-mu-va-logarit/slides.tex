@@ -1,0 +1,325 @@
+\documentclass[aspectratio=169]{beamer}
+\usepackage{../../../../themes/hocduongviet}
+
+\title{Hàm số bậc nhất}
+\subtitle{Toán 10}
+\author{Học Đường Việt}
+
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Giao nhiệm vụ}
+    \begin{itemize}
+        \item \textbf{Nhiệm vụ:} \\
+        
+        1. Hãy nhớ lại kiến thức về lũy thừa đã học ở cấp THCS và cho biết:\\
+        
+        ~~~Giá trị của $2^3$, $(\frac{1}{3})^2$, $(-2)^4$. 
+        
+        2. Trả lời câu hỏi: theo các em, $2^{-1}$, $4^{1/2}$, $2^{\sqrt{2}}$ có ý nghĩa gì và có thể tính được không (trả lời theo suy nghĩ riêng, độc lập)? 
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Tổ chức thảo luận}
+    \begin{itemize}
+        \item "Lũy thừa với số mũ tự nhiên được định nghĩa như thế nào? Nêu một ví dụ."
+        \item "Có những quy ước nào về lũy thừa với số mũ 0 hoặc số mũ nguyên âm mà các em đã biết? Nêu điều kiện của cơ số trong các trường hợp đó."
+        \item "Để tính được $a^x$ với $x$ là số hữu tỉ hoặc số thực, theo các em, chúng ta cần bổ sung thêm những kiến thức gì?"
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{MỞ BÀI}
+    \begin{itemize}
+        \item Trong toán học và các ứng dụng thực tế, chúng ta thường xuyên gặp các phép tính lũy thừa với số mũ không phải là số nguyên. Vì vậy cần mở rộng khái niệm lũy thừa cho số mũ hữu tỉ và số mũ thực và tìm hiểu các tính chất chung của phép tính lũy thừa.
+    \end{itemize}
+\end{frame}
+
+\section*{Hoạt động hình thành kiến thức}
+
+\subsection*{Đơn vị kiến thức 1: Lũy thừa với số mũ nguyên}
+
+\begin{frame}[fragile]
+    \frametitle{Lũy thừa với số mũ nguyên}
+    \begin{itemize}
+        \item \textbf{Kiến thức và kỹ năng cần đạt}
+        \begin{itemize}
+            \item Nhận biết và phát biểu được định nghĩa lũy thừa với số mũ nguyên.
+            \item Vận dụng định nghĩa để tính toán các biểu thức số có chứa lũy thừa với số mũ nguyên.
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Lũy thừa với số mũ nguyên}
+    \begin{itemize}
+        \item \textbf{Nhiệm vụ:} "Hãy nghiên cứu Mục 1, trang 5 của Sách giáo khoa Toán 11 - Kết nối tri thức với cuộc sống để tìm hiểu định nghĩa lũy thừa với số mũ nguyên. Sau đó, vận dụng định nghĩa để tính: $3^{-2}$, $(\frac{1}{2})^{-3}$, $(-5)^0$."
+        \item \textbf{Yêu cầu học tập:} Học sinh đọc SGK, tự ghi lại định nghĩa vào vở và hoàn thành các bài tập tính toán.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Sản phẩm của học sinh}
+    \framesubtitle{Đơn vị kiến thức 1: Lũy thừa với số mũ nguyên}
+    \begin{itemize}
+        \item Định nghĩa lũy thừa với số mũ nguyên được ghi trong vở và các kết quả tính toán: $3^{-2} = \frac{1}{9}$, $(\frac{1}{2})^{-3} = 8$, $(-5)^0 = 1$.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Tổ chức thảo luận}
+    \framesubtitle{Đơn vị kiến thức 1: Lũy thừa với số mũ nguyên}
+    \begin{itemize}
+        \item "Nêu định nghĩa lũy thừa $a^n$ khi $n$ là số nguyên dương, $n=0$ và $n$ là số nguyên âm. Điều kiện của cơ số $a$ trong mỗi trường hợp là gì?"
+        \item "So sánh định nghĩa này với kiến thức đã học ở THCS. Có gì giống và khác biệt?"
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Chốt kiến thức}
+    \framesubtitle{Đơn vị kiến thức 1: Lũy thừa với số mũ nguyên}
+    \begin{itemize}
+        \item Giáo viên chính xác hóa định nghĩa:
+        \begin{itemize}
+            \item Cho $a \ne 0$:
+            \begin{itemize}
+                \item Nếu $n$ là số nguyên dương, $a^n = a \cdot a \cdots a$ ($n$ thừa số $a$).
+                \item Nếu $n=0$, $a^0 = 1$.
+                \item Nếu $n$ là số nguyên âm, $a^n = \frac{1}{a^{-n}}$.
+            \end{itemize}
+            \item Ví dụ minh họa.
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\subsection*{Đơn vị kiến thức 2: Lũy thừa với số mũ hữu tỉ}
+
+\begin{frame}[fragile]
+    \frametitle{ Lũy thừa với số mũ hữu tỉ}
+    \begin{itemize}
+        \item \textbf{Kiến thức và kỹ năng cần đạt}
+        \begin{itemize}
+            \item Nêu được định nghĩa lũy thừa với số mũ hữu tỉ.
+            \item Xác định được điều kiện của cơ số khi lũy thừa với số mũ hữu tỉ.
+            \item Thực hiện được các phép tính lũy thừa với số mũ hữu tỉ đơn giản.
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Nhiệm vụ của học sinh}
+    \begin{itemize}
+        \item \textbf{Nhiệm vụ:} "Dựa trên định nghĩa lũy thừa số mũ nguyên và mối liên hệ giữa lũy thừa với số mũ $1/n$ và căn bậc $n$, các em hãy đề xuất định nghĩa lũy thừa với số mũ hữu tỉ $\frac{m}{n}$ và tính giá trị của $8^{1/3}$, $4^{3/2}$. (Gợi ý: $(\sqrt[n]{a})^n = a$)."
+        \item \textbf{Yêu cầu học tập:} Học sinh thảo luận nhóm (hoặc cá nhân), đưa ra định nghĩa và tính toán.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Sản phẩm của học sinh}
+    \framesubtitle{Đơn vị kiến thức 2: Lũy thừa với số mũ hữu tỉ}
+    \begin{itemize}
+        \item Định nghĩa lũy thừa với số mũ hữu tỉ đề xuất và các kết quả tính toán: $8^{1/3} = 2$, $4^{3/2} = 8$.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Tổ chức thảo luận}
+    \framesubtitle{Đơn vị kiến thức 2: Lũy thừa với số mũ hữu tỉ}
+    \begin{itemize}
+        \item "Để đảm bảo phép tính lũy thừa có nghĩa, cơ số $a$ trong $a^{m/n}$ cần thỏa mãn điều kiện gì?"
+        \item "Lũy thừa với số mũ hữu tỉ $\frac{m}{n}$ được định nghĩa như thế nào? Nêu công thức liên hệ với căn bậc $n$."
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Chốt kiến thức}
+    \framesubtitle{Đơn vị kiến thức 2: Lũy thừa với số mũ hữu tỉ}
+    \begin{itemize}
+        \item Giáo viên chính xác hóa định nghĩa:
+        \begin{itemize}
+            \item Cho $a > 0$, $r = \frac{m}{n}$ là số hữu tỉ ($m \in \mathbb{Z}$, $n \in \mathbb{N}^*$, $n \ge 2$).
+            \item $a^r = a^{m/n} = \sqrt[n]{a^m} = (\sqrt[n]{a})^m$.
+            \item Nhấn mạnh điều kiện $a > 0$ là bắt buộc để lũy thừa với số mũ hữu tỉ luôn có nghĩa.
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\subsection*{Đơn vị kiến thức 3: Lũy thừa với số mũ thực}
+
+\begin{frame}[fragile]
+    \frametitle{Lũy thừa với số mũ thực -- Mục tiêu}
+    \begin{itemize}
+        \item \textbf{Kiến thức / kỹ năng 3 cần đạt}
+        \begin{itemize}
+            \item Hiểu được cách mở rộng khái niệm lũy thừa cho số mũ thực (số vô tỉ) dựa trên khái niệm giới hạn.
+            \item Nắm vững điều kiện của cơ số khi lũy thừa với số mũ thực.
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Nhiệm vụ của học sinh}
+
+    \begin{itemize}
+        \item \textbf{Nhiệm vụ:} "Các em hãy đọc Mục 3, trang 7 của Sách giáo khoa để tìm hiểu về định nghĩa lũy thừa với số mũ thực. Hãy trả lời câu hỏi: Khi nào thì $a^\alpha$ có nghĩa nếu $\alpha$ là số thực (đặc biệt là số vô tỉ)?"
+        \item \textbf{Yêu cầu học tập:} Học sinh đọc SGK, ghi nhớ định nghĩa và điều kiện cơ số.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Sản phẩm của học sinh}
+    \framesubtitle{Đơn vị kiến thức 3: Lũy thừa với số mũ thực}
+    \begin{itemize}
+        \item Tóm tắt về định nghĩa lũy thừa với số mũ thực và điều kiện của cơ số.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Tổ chức thảo luận}
+    \framesubtitle{Đơn vị kiến thức 3: Lũy thừa với số mũ thực}
+    \begin{itemize}
+        \item "Để định nghĩa $a^\alpha$ khi $\alpha$ là số vô tỉ, người ta thường sử dụng phương pháp nào? (Gợi ý: dãy số hữu tỉ)."
+        \item "Điều kiện của cơ số $a$ khi số mũ là số thực là gì? Tại sao?"
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Chốt kiến thức}
+    \framesubtitle{Đơn vị kiến thức 3: Lũy thừa với số mũ thực}
+    \begin{itemize}
+        \item Giáo viên chính xác hóa định nghĩa:
+        \begin{itemize}
+            \item Cho $a > 0$ và $\alpha$ là một số thực bất kì.
+            \item Lũy thừa $a^\alpha$ được định nghĩa thông qua giới hạn của dãy lũy thừa với số mũ hữu tỉ. Cụ thể, nếu $(r_n)$ là một dãy số hữu tỉ hội tụ về $\alpha$, thì $a^\alpha = \lim_{n \to \infty} a^{r_n}$.
+            \item Nhấn mạnh điều kiện $a > 0$ là bắt buộc đối với lũy thừa với số mũ thực để đảm bảo định nghĩa luôn tồn tại và có giá trị xác định.
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\subsection*{Đơn vị kiến thức 4: Các tính chất của lũy thừa}
+
+\begin{frame}[fragile]
+    \frametitle{ Các tính chất của lũy thừa với số mũ thực}
+    \begin{itemize}
+        \item \textbf{Kiến thức và kỹ năng cần đạt}
+        \begin{itemize}
+            \item Nêu và giải thích được các tính chất của phép tính lũy thừa.
+            \item Nhận biết được phạm vi áp dụng của từng tính chất (điều kiện của cơ số và số mũ).
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Nhiệm vụ học sinh}
+    \framesubtitle{Đơn vị kiến thức 4: Các tính chất của lũy thừa}
+    \begin{itemize}
+        \item \textbf{Nhiệm vụ:} "Dựa trên các định nghĩa lũy thừa đã học (số mũ nguyên, hữu tỉ, thực) và kiến thức cũ, các em hãy nghiên cứu Mục 3, trang 7 để liệt kê và trình bày các tính chất của lũy thừa. Hãy nêu rõ điều kiện của cơ số và số mũ cho mỗi tính chất."
+        \item \textbf{Yêu cầu học tập:} Học sinh đọc SGK, ghi lại các tính chất và điều kiện áp dụng.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Sản phẩm của học sinh}
+    \framesubtitle{Đơn vị kiến thức 4: Các tính chất của lũy thừa}
+    \begin{itemize}
+        \item Bảng tổng hợp các tính chất của lũy thừa, kèm theo điều kiện của cơ số và số mũ.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Tổ chức thảo luận}
+    \framesubtitle{Đơn vị kiến thức 4: Các tính chất của lũy thừa}
+    \begin{itemize}
+        \item "Hãy kể tên các tính chất cơ bản của phép tính lũy thừa."
+        \item "Các tính chất này có đúng với tất cả các loại số mũ (nguyên, hữu tỉ, thực) không? Điều kiện của cơ số có thay đổi không?"
+        \item "Nêu một ví dụ áp dụng một trong các tính chất."
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Chốt kiến thức}
+    \framesubtitle{Đơn vị kiến thức 4: Các tính chất của lũy thừa}
+    \begin{itemize}
+        \item Giáo viên tổng hợp và chính xác hóa các tính chất của lũy thừa:
+        \begin{itemize}
+            \item Với $a, b > 0$ và $\alpha, \beta \in \mathbb{R}$:
+            \begin{itemize}
+                \item $a^\alpha \cdot a^\beta = a^{\alpha+\beta}$
+                \item $\frac{a^\alpha}{a^\beta} = a^{\alpha-\beta}$
+                \item $(a^\alpha)^\beta = a^{\alpha\beta}$
+                \item $(ab)^\alpha = a^\alpha b^\alpha$
+                \item $(\frac{a}{b})^\alpha = \frac{a^\alpha}{b^\alpha}$
+            \end{itemize}
+            \item Lưu ý các trường hợp đặc biệt về điều kiện cơ số khi số mũ là nguyên.
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\subsection*{Đơn vị kiến thức 5: Vận dụng tính chất vào tính toán và giải quyết vấn đề}
+
+\begin{frame}[fragile]
+    \frametitle{ Vận dụng tính chất vào tính toán và giải quyết vấn đề -- Mục tiêu}
+    \begin{itemize}
+        \item \textbf{Kiến thức và kỹ năng cần đạt}
+        \begin{itemize}
+            \item Sử dụng thành thạo các tính chất của lũy thừa trong tính toán giá trị biểu thức số và rút gọn các biểu thức chứa biến.
+            \item Vận dụng máy tính cầm tay để tính giá trị biểu thức lũy thừa một cách chính xác.
+            \item Giải quyết được các bài toán thực tiễn liên quan đến lũy thừa (ví dụ: lãi suất kép, tăng trưởng dân số, phân rã phóng xạ).
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Chuyển giao nhiệm vụ}
+    \framesubtitle{Đơn vị kiến thức 5: Vận dụng tính chất vào tính toán và giải quyết vấn đề}
+    \begin{itemize}
+        \item \textbf{Câu lệnh:} "Các em hãy vận dụng các tính chất lũy thừa đã học để giải các bài tập sau:
+        \begin{enumerate}
+            \item Rút gọn biểu thức $A = \frac{x^{1/3} \cdot y^{2/3}}{(xy)^{1/6}}$ với $x,y > 0$.
+            \item Tính giá trị biểu thức $B = (27^{1/3} + 8^{1/3})^2$.
+            \item Sử dụng máy tính cầm tay để tính $3^{\sqrt{2}}$ (làm tròn đến 3 chữ số thập phân).
+            \item Giải bài toán: Một người gửi tiết kiệm 100 triệu đồng với lãi suất 6\%/năm theo hình thức lãi kép. Hỏi sau 5 năm người đó nhận được bao nhiêu tiền (làm tròn đến nghìn đồng)?"
+        \end{enumerate}"
+        \item \textbf{Yêu cầu học tập:} Học sinh làm bài tập cá nhân hoặc thảo luận nhóm, trình bày lời giải chi tiết.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Sản phẩm của học sinh}
+    \framesubtitle{Đơn vị kiến thức 5: Vận dụng tính chất vào tính toán và giải quyết vấn đề}
+    \begin{itemize}
+        \item Lời giải chi tiết các bài tập:
+        \begin{itemize}
+            \item Bài 1: $A = \frac{x^{1/3} y^{2/3}}{x^{1/6} y^{1/6}} = x^{1/3-1/6} y^{2/3-1/6} = x^{1/6} y^{1/2}$.
+            \item Bài 2: $B = (3 + 2)^2 = 5^2 = 25$.
+            \item Bài 3: $3^{\sqrt{2}} \approx 4.729$.
+            \item Bài 4: Số tiền nhận được = $100 \cdot (1 + 0.06)^5 \approx 100 \cdot 1.3382255776 \approx 133,823$ nghìn đồng.
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Tổ chức thảo luận}
+    \framesubtitle{Đơn vị kiến thức 5: Vận dụng tính chất vào tính toán và giải quyết vấn đề}
+    \begin{itemize}
+        \item "Khi rút gọn biểu thức chứa biến, chúng ta cần lưu ý điều gì về điều kiện của các biến?"
+        \item "Làm thế nào để sử dụng máy tính cầm tay một cách hiệu quả và chính xác khi tính toán lũy thừa với số mũ không nguyên?"
+        \item "Nêu một ví dụ khác về ứng dụng của lũy thừa trong thực tiễn ngoài bài toán lãi suất."
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Chốt kiến thức}
+    \framesubtitle{Đơn vị kiến thức 5: Vận dụng tính chất vào tính toán và giải quyết vấn đề}
+    \begin{itemize}
+        \item Giáo viên tổng hợp các phương pháp giải các dạng bài tập khác nhau liên quan đến lũy thừa. Nhấn mạnh tầm quan trọng của việc nắm vững các tính chất và điều kiện áp dụng. Hướng dẫn sử dụng máy tính cầm tay đúng cách. Khẳng định vai trò quan trọng của phép tính lũy thừa trong việc mô hình hóa và giải quyết các vấn đề thực tiễn trong nhiều lĩnh vực khoa học và đời sống.
+    \end{itemize}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,30 @@
+% slidepreamble.tex
+\documentclass[aspectratio=169]{beamer}
+
+% ===== PACKAGES =====
+\usepackage[utf8]{inputenc}
+\usepackage[vietnamese]{babel}
+\usepackage{amsmath, amssymb}
+\usepackage{tikz}
+\usepackage{graphicx}
+
+% ===== THEME =====
+\usetheme{Madrid}
+\usecolortheme{default}
+
+% ===== MACROS =====
+\input{public/examstyle.sty}
+
+% (optional)
+\IfFileExists{private/examengine.sty}{
+  \input{private/examengine.sty}
+}{}
+
+% ===== METADATA PLACEHOLDERS =====
+\newcommand{\LessonTitle}{}
+\newcommand{\LessonAuthor}{}
+\newcommand{\LessonDate}{}
+
+\title{\LessonTitle}
+\author{\LessonAuthor}
+\date{\LessonDate}
