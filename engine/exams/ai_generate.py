@@ -23,7 +23,7 @@ prompt = prompt_template.replace("{{SCHEMA}}", schema_text)
 # =========================
 # GEMINI CLIENT (NEW API)
 # =========================
-"api_key = os.getenv("GEMINI_API_KEY")
+# api_key = os.getenv("GEMINI_API_KEY")
 api_key = os.environ["GEMINI_API_KEY"]
 if not api_key:
     raise RuntimeError("❌ GEMINI_API_KEY is missing")
