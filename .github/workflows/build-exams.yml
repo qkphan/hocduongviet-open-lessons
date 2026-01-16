@@ -33,7 +33,7 @@ jobs:
         # pip install jsonschema openai
         python -m pip install --upgrade pip
         pip install jsonschema google-genai
-
+  
     # ===============================
     # 3. AI Generate exam.json
     # ===============================
