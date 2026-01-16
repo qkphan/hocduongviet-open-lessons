@@ -19,10 +19,10 @@ jobs:
         uses: xu-cheng/latex-action@v2
         with:
           root_file: slides.tex
-          working_directory: lessons/toan/lop11/ham-so-mu-va-logarit
+          working_directory: lessons/toan/lop11/ch6/bai/ham-so-mu-va-logarit/content
 
       - name: Upload PDF
         uses: actions/upload-artifact@v4
         with:
           name: slides-pdf
-          path: lessons/toan/lop11/ham-so-mu-va-logarit/slides.pdf
+          path: lessons/toan/lop11/ch6/bai/ham-so-mu-va-logarit/build/slides.pdf
