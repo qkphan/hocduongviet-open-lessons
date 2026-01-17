@@ -1,13 +1,21 @@
 name: Build Exams (AI + Schema + LaTeX)
 
+# on:
+#   push:
+#     paths:
+#       - "engine/**"
+#       - "tools/**"
+#       - "styles/**"
+#       - ".github/workflows/build-exam.yml"
+#   workflow_dispatch:
+
 on:
-  push:
-    paths:
-      - "engine/**"
-      - "tools/**"
-      - "styles/**"
-      - ".github/workflows/build-exam.yml"
   workflow_dispatch:
+    inputs:
+      enable_ai:
+        description: "Enable Gemini AI"
+        required: true
+        default: "true"
 
 jobs:
   build-exam:

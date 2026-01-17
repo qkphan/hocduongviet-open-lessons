@@ -1,0 +1,73 @@
+{
+  "exam": {
+    "title": "Hàm số mũ và hàm số logarit",
+    "subject": "Toán",
+    "grade": 11,
+    "lesson_code": "TOAN11-CH6-HSML",
+    "duration": 45,
+    "questions": [
+      {
+        "id": "Q1",
+        "type": "mcq",
+        "content": "Giá trị của \\( \\log_2 8 \\) bằng bao nhiêu?",
+        "difficulty": "easy",
+        "cognitive_level": "remember",
+        "score": 0.5,
+        "choices": [
+          { "label": "A", "content": "2", "is_correct": false },
+          { "label": "B", "content": "3", "is_correct": true },
+          { "label": "C", "content": "4", "is_correct": false },
+          { "label": "D", "content": "8", "is_correct": false }
+        ],
+        "answer_key": "B",
+        "explanation": "Vì \\(2^3 = 8\\) nên \\(\\log_2 8 = 3\\)."
+      },
+
+      {
+        "id": "Q2",
+        "type": "tfq",
+        "content": "Hàm số \\(y = a^x\\) với \\(a > 1\\) là hàm đồng biến trên \\(\\mathbb{R}\\).",
+        "difficulty": "easy",
+        "cognitive_level": "understand",
+        "score": 0.5,
+        "choices": [
+          { "label": "True", "content": "Đúng", "is_correct": true },
+          { "label": "False", "content": "Sai", "is_correct": false }
+        ],
+        "answer_key": true,
+        "explanation": "Với \\(a>1\\), hàm số mũ luôn đồng biến."
+      },
+
+      {
+        "id": "Q3",
+        "type": "shortAns",
+        "content": "Giải phương trình \\(\\log_3 x = 2\\).",
+        "difficulty": "medium",
+        "cognitive_level": "apply",
+        "score": 1.0,
+        "answer_key": "x = 9",
+        "explanation": "Ta có \\(x = 3^2 = 9\\)."
+      },
+
+      {
+        "id": "Q4",
+        "type": "essayq",
+        "content": "Trình bày định nghĩa hàm số logarit và nêu điều kiện xác định.",
+        "difficulty": "medium",
+        "cognitive_level": "understand",
+        "score": 2.0,
+        "rubric": "Học sinh nêu đúng định nghĩa, điều kiện của cơ số và biến số. Trình bày rõ ràng."
+      },
+
+      {
+        "id": "Q5",
+        "type": "advanceessq",
+        "content": "Giải và biện luận theo tham số m phương trình \\(\\log(x+m) = 2\\).",
+        "difficulty": "hard",
+        "cognitive_level": "analyze",
+        "score": 3.0,
+        "rubric": "Xác định điều kiện xác định, giải phương trình, biện luận theo m. Trình bày logic, chặt chẽ."
+      }
+    ]
+  }
+}

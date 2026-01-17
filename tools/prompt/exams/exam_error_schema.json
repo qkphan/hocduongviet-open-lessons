@@ -1,0 +1,32 @@
+{
+  "type": "object",
+  "required": ["valid", "summary", "errors"],
+  "properties": {
+    "valid": { "type": "boolean" },
+    "summary": {
+      "type": "object",
+      "properties": {
+        "error": { "type": "integer" },
+        "warning": { "type": "integer" }
+      }
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["message", "severity"],
+        "properties": {
+          "question_id": { "type": ["string", "null"] },
+          "index": { "type": ["integer", "null"] },
+          "path": { "type": "string" },
+          "type": { "type": "string" },
+          "message": { "type": "string" },
+          "expected": { "type": "string" },
+          "severity": {
+            "enum": ["error", "warning"]
+          }
+        }
+      }
+    }
+  }
+}

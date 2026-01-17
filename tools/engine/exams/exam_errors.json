@@ -1,0 +1,18 @@
+{
+  "valid": false,
+  "summary": {
+    "error": 2,
+    "warning": 1
+  },
+  "errors": [
+    {
+      "question_id": "Q12",
+      "index": 11,
+      "path": "/questions/11/correct",
+      "type": "missing_field",
+      "message": "Thiếu đáp án đúng",
+      "expected": "correct: number | number[]",
+      "severity": "error"
+    }
+  ]
+}
