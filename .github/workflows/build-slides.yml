@@ -1,7 +1,8 @@
 name: Build Slides
 
 on:
-  push:
+  # push:
+  workflow_dispatch:
 
 jobs:
   build:
