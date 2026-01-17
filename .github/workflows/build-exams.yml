@@ -1,19 +1,10 @@
-name: Build Exams (AI + Schema + LaTeX)
-
-# on:
-#   push:
-#     paths:
-#       - "engine/**"
-#       - "tools/**"
-#       - "styles/**"
-#       - ".github/workflows/build-exam.yml"
-#   workflow_dispatch:
+name: Build Exams (AI + Data + LaTeX)
 
 on:
   workflow_dispatch:
     inputs:
       enable_ai:
-        description: "Enable Gemini AI"
+        description: "Enable Gemini AI (true/false)"
         required: true
         default: "true"
 
@@ -38,39 +29,38 @@ jobs:
 
     - name: Install Python dependencies
       run: |
-        # pip install jsonschema openai
         python -m pip install --upgrade pip
         pip install jsonschema google-genai
-  
-    # ===============================
-    # 3. AI Generate exam.json
-    # ===============================
-    - name: Generate exam JSON (AI)
-      env:
-        # OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-      run: |
-        python tools/engine/exams/ai_generate.py
 
     # ===============================
-    # 4. Validate & Auto-fix loop
+    # 3. AI Generate exam.ai.json
+    # ===============================
+    - name: Generate exam (AI → exam.ai.json)
+      if: ${{ inputs.enable_ai == 'true' }}
+      env:
+        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      run: |
+        python tools/engine/exams/ai_generate.py \
+          --output data/exams/exam.ai.json
+
+    # ===============================
+    # 4. Validate & Auto-fix
     # ===============================
     - name: Validate & Fix exam JSON
       env:
-        # OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       run: |
         MAX_RETRY=3
         COUNT=0
 
-        until python tools/engine/exams/exam_validate.py; do
+        until python tools/engine/exams/exam_validate.py data/exams; do
           COUNT=$((COUNT+1))
           if [ "$COUNT" -ge "$MAX_RETRY" ]; then
-            echo "❌ JSON still invalid after $MAX_RETRY attempts"
+            echo "❌ Exam JSON still invalid after $MAX_RETRY attempts"
             exit 1
           fi
           echo "🔁 Fixing JSON (attempt $COUNT)..."
-          python tools/engine/exams/ai_fix.py
+          python tools/engine/exams/ai_fix.py data/exams
         done
 
     # ===============================
@@ -78,7 +68,10 @@ jobs:
     # ===============================
     - name: Generate exam_data.tex
       run: |
-        python tools/engine/exams/examengine.py
+        python tools/engine/exams/examengine.py \
+          --input data/exams \
+          --choice-format 1-2-3-4 \
+          --output build/exam_data.tex
 
     # ===============================
     # 6. Install LaTeX

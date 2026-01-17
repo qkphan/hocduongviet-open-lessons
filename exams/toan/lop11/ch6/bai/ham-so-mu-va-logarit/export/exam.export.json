@@ -1,0 +1,25 @@
+{
+  "exam": {
+    "title": "...",
+    "subject": "...",
+    "grade": 11,
+    "lesson_code": "...",
+    "duration": 45,
+    "questions": [
+      {
+        "id": "Q1",
+        "type": "mcq",
+        "content": "...",
+        "difficulty": "easy",
+        "cognitive_level": "remember",
+        "score": 0.5,
+        "choices": [
+          { "label": "A", "content": "...", "is_correct": false },
+          { "label": "B", "content": "...", "is_correct": true }
+        ],
+        "answer_key": "B",
+        "explanation": "..."
+      }
+    ]
+  }
+}

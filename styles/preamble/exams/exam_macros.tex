@@ -1,0 +1,21 @@
+\newcommand{\questionitem}[1]{\item #1}
+
+\newenvironment{choices}{
+  \begin{enumerate}[label=\Alph*.]
+}{
+  \end{enumerate}
+}
+
+\newcommand{\correct}[1]{\item[\textbf{\Alph*.}] #1}
+
+\newcommand{\shortanswer}[1]{%
+  \par\textbf{Đáp án ngắn:} #1
+}
+
+\newcommand{\essay}[1]{%
+  \par\textbf{Tự luận:} #1
+}
+
+\newcommand{\loigiai}[1]{%
+  \par\textit{Lời giải:} #1
+}

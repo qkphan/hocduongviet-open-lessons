@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Exam Data Schema v1",
+  "type": "object",
+  "required": ["meta", "exam"],
+
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["version", "source", "created_at"],
+      "properties": {
+        "version": { "type": "string", "pattern": "^1\\.0\\.\\d+$" },
+        "source": { "type": "string", "enum": ["ai", "teacher", "merged"] },
+        "created_at": { "type": "string", "format": "date-time" }
+      }
+    },
+
+    "exam": {
+      "type": "object",
+      "required": [
+        "title", "subject", "grade",
+        "lesson_code", "duration", "questions"
+      ],
+      "properties": {
+        "title": { "type": "string" },
+        "subject": { "type": "string" },
+        "grade": { "type": "integer", "minimum": 1, "maximum": 12 },
+        "lesson_code": { "type": "string" },
+        "duration": { "type": "integer", "minimum": 5 },
+        "questions": {
+          "type": "array",
+          "minItems": 1
+        }
+      }
+    }
+  }
+}
