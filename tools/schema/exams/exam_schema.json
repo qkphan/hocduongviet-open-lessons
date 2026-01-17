@@ -1,148 +1,24 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Exam Data Schema",
-  "type": "object",
-  "required": ["meta", "sections"],
-
-  "properties": {
-    "meta": {
-      "type": "object",
-      "required": [
-        "subject",
-        "timeexam",
-        "examcode",
-        "schoolname",
-        "departmentname",
-        "examname"
-      ],
-      "properties": {
-        "subject": { "type": "string" },
-        "timeexam": { "type": "string" },
-        "examcode": { "type": "string" },
-        "schoolname": { "type": "string" },
-        "departmentname": { "type": "string" },
-        "examname": { "type": "string" }
-      }
-    },
-
-    "sections": {
-      "type": "array",
-      "minItems": 1,
-      "items": {
-        "type": "object",
-        "required": ["id", "type", "title", "questions"],
-        "properties": {
-          "id": {
-            "type": "string",
-            "enum": ["I", "II", "III", "IV", "V"]
-          },
-          "type": {
-            "type": "string",
-            "enum": [
-              "multiple_choice",
-              "true_false",
-              "short_answer",
-              "essay",
-              "advanced_essay"
-            ]
-          },
-          "title": { "type": "string" },
-
-          "questions": {
-            "type": "array",
-            "items": {
-              "oneOf": [
-                { "$ref": "#/definitions/mcq" },
-                { "$ref": "#/definitions/true_false" },
-                { "$ref": "#/definitions/short_answer" },
-                { "$ref": "#/definitions/essay" },
-                { "$ref": "#/definitions/advanced_essay" }
-              ]
-            }
-          }
-        }
-      }
-    }
+  "metadata": {
+    "exam_id": "toan11-log-001",
+    "version": "1.0.0",
+    "created_by": "ai",
+    "source": "HocDuongViet",
+    "license": "CC-BY-SA-4.0"
   },
-
-  "definitions": {
-    "mcq": {
-      "type": "object",
-      "required": ["id", "content", "choices", "correct"],
-      "properties": {
-        "id": { "type": "integer" },
-        "content": { "type": "string" },
-        "choices": {
-          "type": "array",
-          "minItems": 4,
-          "maxItems": 4,
-          "items": { "type": "string" }
-        },
-        "correct": {
-          "type": "integer",
-          "minimum": 0,
-          "maximum": 3
-        }
-      }
-    },
-
-    "true_false": {
-      "type": "object",
-      "required": ["id", "stem", "statements"],
-      "properties": {
-        "id": { "type": "integer" },
-        "stem": { "type": "string" },
-        "statements": {
-          "type": "array",
-          "minItems": 4,
-          "maxItems": 4,
-          "items": { "type": "string" }
-        },
-        "answers": {
-          "type": "array",
-          "minItems": 4,
-          "maxItems": 4,
-          "items": { "type": "boolean" }
-        }
-      }
-    },
-
-    "short_answer": {
-      "type": "object",
-      "required": ["id", "stem", "subquestions"],
-      "properties": {
-        "id": { "type": "integer" },
-        "stem": { "type": "string" },
-        "subquestions": {
-          "type": "array",
-          "minItems": 1,
-          "items": { "type": "string" }
-        }
-      }
-    },
-
-    "essay": {
-      "type": "object",
-      "required": ["id", "content", "hint"],
-      "properties": {
-        "id": { "type": "integer" },
-        "content": { "type": "string" },
-        "hint": { "type": "string" }
-      }
-    },
-
-    "advanced_essay": {
-      "type": "object",
-      "required": ["id", "content", "parts"],
-      "properties": {
-        "id": { "type": "integer" },
-        "content": { "type": "string" },
-        "parts": {
-          "type": "array",
-          "minItems": 2,
-          "items": { "type": "string" }
-        }
-      }
+  "questions": [
+    {
+      "id": "Q1",
+      "type": "mcq",
+      "content": "Giải phương trình $2^x=8$",
+      "choices": [
+        "x=1",
+        "x=2",
+        "x=3",
+        "x=4"
+      ],
+      "answer": 3,
+      "explanation": "Vì $2^3=8$"
     }
-  }
+  ]
 }
