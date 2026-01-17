@@ -50,7 +50,7 @@ jobs:
         # OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       run: |
-        python engine/exams/ai_generate.py
+        python tools/engine/exams/ai_generate.py
 
     # ===============================
     # 4. Validate & Auto-fix loop
@@ -63,14 +63,14 @@ jobs:
         MAX_RETRY=3
         COUNT=0
 
-        until python engine/exams/exam_validate.py; do
+        until python tools/engine/exams/exam_validate.py; do
           COUNT=$((COUNT+1))
           if [ "$COUNT" -ge "$MAX_RETRY" ]; then
             echo "❌ JSON still invalid after $MAX_RETRY attempts"
             exit 1
           fi
           echo "🔁 Fixing JSON (attempt $COUNT)..."
-          python engine/exams/ai_fix.py
+          python tools/engine/exams/ai_fix.py
         done
 
     # ===============================
@@ -78,7 +78,7 @@ jobs:
     # ===============================
     - name: Generate exam_data.tex
       run: |
-        python engine/exams/examengine.py
+        python tools/engine/exams/examengine.py
 
     # ===============================
     # 6. Install LaTeX
