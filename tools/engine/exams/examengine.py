@@ -13,7 +13,7 @@ from pathlib import Path
 # ==============================
 # CONFIG
 # ==============================
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[3]
 SCHEMA_DIR = ROOT / "tools" / "schema" / "exams"
 EXAM_JSON = ROOT / "exam.json"
 OUTPUT_TEX = ROOT / "exam_data.tex"
