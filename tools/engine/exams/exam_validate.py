@@ -10,7 +10,7 @@ def validate_file(path: Path):
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
     except Exception as e:
-        return [error(
+        return [errors(
             code="INVALID_JSON",
             file=path.name,
             path="",
