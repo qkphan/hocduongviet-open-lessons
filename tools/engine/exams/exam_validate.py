@@ -4,13 +4,34 @@ from rules.schema import validate_schema
 from rules.logic import validate_logic
 from rules.latex import validate_latex
 
+def error(
+    *,
+    code,
+    file,
+    path,
+    message,
+    expected=None,
+    actual=None,
+    severity="error"
+):
+    return {
+        "code": code,
+        "file": file,
+        "path": path,
+        "message": message,
+        "expected": expected,
+        "actual": actual,
+        "severity": severity,
+    }
+
+
 def validate_file(path: Path):
     errors = []
 
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
     except Exception as e:
-        return [errors(
+        return [error(
             code="INVALID_JSON",
             file=path.name,
             path="",
