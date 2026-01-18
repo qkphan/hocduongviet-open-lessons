@@ -1,84 +1,195 @@
+#!/usr/bin/env python3
 import json
+import sys
 from pathlib import Path
-from rules.schema import validate_schema
-from rules.logic import validate_logic
-from rules.latex import validate_latex
 
-def error(
-    *,
-    code,
-    file,
-    path,
-    message,
-    expected=None,
-    actual=None,
-    severity="error"
-):
-    return {
-        "code": code,
-        "file": file,
-        "path": path,
-        "message": message,
-        "expected": expected,
-        "actual": actual,
-        "severity": severity,
-    }
+from errors import make_error
+from registry import SECTION_RULES
 
 
+# -------------------------
+# FILE LEVEL
+# -------------------------
 def validate_file(path: Path):
     errors = []
 
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
     except Exception as e:
-        return [error(
+        return [make_error(
             code="INVALID_JSON",
             file=path.name,
             path="",
             message=str(e),
             expected="valid JSON",
-            actual="invalid"
+            actual="invalid",
+            severity="error"
         )]
 
-    exam = data.get("exam")
-    if not exam:
-        return [error(
+    # -------------------------
+    # META
+    # -------------------------
+    if "meta" not in data or not isinstance(data["meta"], dict):
+        errors.append(make_error(
             code="MISSING_FIELD",
             file=path.name,
-            path="exam",
-            message="Missing root field: exam",
-            expected="object",
-            actual=None
-        )]
+            path="meta",
+            message="Missing or invalid meta section",
+            severity="error"
+        ))
+    else:
+        if "title" not in data["meta"]:
+            errors.append(make_error(
+                code="MISSING_FIELD",
+                file=path.name,
+                path="meta.title",
+                message="Missing exam title",
+                severity="warning"
+            ))
 
-    errors += validate_schema(exam, path.name)
-    errors += validate_logic(exam, path.name)
-    errors += validate_latex(exam, path.name)
+    # -------------------------
+    # SECTIONS
+    # -------------------------
+    if "sections" not in data or not isinstance(data["sections"], list):
+        errors.append(make_error(
+            code="INVALID_FIELD",
+            file=path.name,
+            path="sections",
+            message="sections must be an array",
+            severity="error"
+        ))
+        return errors
+
+    if not data["sections"]:
+        errors.append(make_error(
+            code="EMPTY_SECTIONS",
+            file=path.name,
+            path="sections",
+            message="Exam has no sections",
+            severity="warning"
+        ))
+        return errors
+
+    # -------------------------
+    # SECTION LEVEL
+    # -------------------------
+    for si, sec in enumerate(data["sections"]):
+        sec_path = f"sections[{si}]"
+
+        if not isinstance(sec, dict):
+            errors.append(make_error(
+                code="INVALID_SECTION",
+                file=path.name,
+                path=sec_path,
+                message="Section must be an object",
+                severity="error"
+            ))
+            continue
+
+        sec_type = sec.get("type")
+        if not sec_type:
+            errors.append(make_error(
+                code="MISSING_FIELD",
+                file=path.name,
+                path=f"{sec_path}.type",
+                message="Missing section type",
+                severity="error"
+            ))
+            continue
+
+        if "questions" not in sec or not isinstance(sec["questions"], list):
+            errors.append(make_error(
+                code="INVALID_FIELD",
+                file=path.name,
+                path=f"{sec_path}.questions",
+                message="questions must be an array",
+                severity="error"
+            ))
+            continue
+
+        if not sec["questions"]:
+            errors.append(make_error(
+                code="EMPTY_QUESTIONS",
+                file=path.name,
+                path=f"{sec_path}.questions",
+                message="Section has no questions",
+                severity="warning"
+            ))
+            continue
+
+        # -------------------------
+        # DISPATCH BY TYPE
+        # -------------------------
+        rule = SECTION_RULES.get(sec_type)
+        if not rule:
+            errors.append(make_error(
+                code="UNKNOWN_SECTION_TYPE",
+                file=path.name,
+                path=f"{sec_path}.type",
+                message=f"Unsupported section type: {sec_type}",
+                severity="error"
+            ))
+            continue
+
+        errors.extend(rule.validate(sec, path.name, sec_path))
 
     return errors
 
-def validate_dir(dir_path: Path):
-    all_errors = []
 
-    for file in dir_path.glob("*.json"):
-        all_errors.extend(validate_file(file))
+# -------------------------
+# PATH LEVEL
+# -------------------------
+def validate_path(path: Path):
+    errors = []
 
-    return {
-        "valid": len(all_errors) == 0,
-        "errors": all_errors
-    }
+    if path.is_file():
+        errors.extend(validate_file(path))
+
+    elif path.is_dir():
+        jsons = list(path.glob("*.json"))
+        if not jsons:
+            errors.append(make_error(
+                code="NO_EXAM_FOUND",
+                file="__collection__",
+                path="",
+                message="No exam json found in directory",
+                severity="error"
+            ))
+        for f in jsons:
+            errors.extend(validate_file(f))
+
+    else:
+        errors.append(make_error(
+            code="PATH_NOT_FOUND",
+            file="__collection__",
+            path="",
+            message=f"Path not found: {path}",
+            severity="error"
+        ))
+
+    return errors
+
+
+# -------------------------
+# CLI
+# -------------------------
+def main():
+    if len(sys.argv) != 2:
+        print("usage: exam_validate.py <path>")
+        sys.exit(2)
+
+    path = Path(sys.argv[1])
+    errors = validate_path(path)
+
+    valid = not any(e["severity"] == "error" for e in errors)
+
+    print(json.dumps({
+        "valid": valid,
+        "errors": errors
+    }, ensure_ascii=False, indent=2))
+
+    sys.exit(0 if valid else 1)
+
 
 if __name__ == "__main__":
-    import sys
-    target = Path(sys.argv[1])
-
-    if target.is_dir():
-        result = validate_dir(target)
-    else:
-        result = {
-            "valid": True,
-            "errors": validate_file(target)
-        }
-
-    print(json.dumps(result, indent=2, ensure_ascii=False))
-    sys.exit(0 if result["valid"] else 1)
+    main()
