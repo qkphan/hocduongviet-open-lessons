@@ -6,7 +6,7 @@ on:
       enable_ai:
         description: "Enable Gemini AI (true/false)"
         required: true
-        default: "true"
+        default: "false"
 
 jobs:
   build-exam:
