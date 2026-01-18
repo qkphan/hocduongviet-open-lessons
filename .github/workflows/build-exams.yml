@@ -44,9 +44,17 @@ jobs:
           --output data/exams/exam.ai.json
 
     # ===============================
-    # 4. Validate & Auto-fix
+    # 4. Validate (NO auto-fix when AI disabled)
     # ===============================
-    - name: Validate & Fix exam JSON
+    - name: Validate exam JSON
+      run: |
+        python tools/engine/exams/exam_validate.py exams
+
+    # ===============================
+    # 4b. Optional AI Auto-fix
+    # ===============================
+    - name: AI Fix exam JSON
+      if: ${{ inputs.enable_ai == 'true' }}
       env:
         GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       run: |
@@ -60,7 +68,7 @@ jobs:
             exit 1
           fi
           echo "🔁 Fixing JSON (attempt $COUNT)..."
-          python tools/engine/exams/ai_fix.py data/exams
+          python tools/engine/exams/ai_fix.py exams
         done
 
     # ===============================
@@ -69,9 +77,8 @@ jobs:
     - name: Generate exam_data.tex
       run: |
         python tools/engine/exams/examengine.py \
-          --input data/exams \
-          --choice-format 1-2-3-4 \
-          --output build/exam_data.tex
+          --input exams \
+          --output exams/build/exam_data.tex
 
     # ===============================
     # 6. Install LaTeX
