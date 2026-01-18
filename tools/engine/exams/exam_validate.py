@@ -2,8 +2,8 @@ import json
 from pathlib import Path
 from jsonschema import Draft7Validator
 
-ROOT = Path(__file__).resolve().parents[2]
-print("path",ROOT)
+ROOT = Path(__file__).resolve().parents[3]
+print("ROOT",ROOT)
 SCHEMA_FILE = ROOT / "tools/schema/exams/exam_schema.json"
 EXAM_FILE = Path(__file__).parent / "exam.json"
 ERROR_FILE = Path(__file__).parent / "exam_errors.json"
