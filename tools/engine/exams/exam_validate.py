@@ -146,17 +146,22 @@ def validate_path(path: Path):
         errors.extend(validate_file(path))
 
     elif path.is_dir():
-        jsons = list(path.glob("*.json"))
-        if not jsons:
+        exam_files = list(path.rglob("schema/exam.json"))
+
+        if not exam_files:
             errors.append(make_error(
                 code="NO_EXAM_FOUND",
                 file="__collection__",
-                path="",
-                message="No exam json found in directory",
-                severity="error"
+                path=str(path),
+                message="No schema/exam.json found recursively"
             ))
-        for f in jsons:
+            return errors
+
+        for f in exam_files:
             errors.extend(validate_file(f))
+
+        return errors
+
 
     else:
         errors.append(make_error(
