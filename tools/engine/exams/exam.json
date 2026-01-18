@@ -1,0 +1,24 @@
+{
+  "metadata": {
+    "exam_id": "toan11-log-001",
+    "version": "1.0.0",
+    "created_by": "ai",
+    "source": "HocDuongViet",
+    "license": "CC-BY-SA-4.0"
+  },
+  "questions": [
+    {
+      "id": "Q1",
+      "type": "mcq",
+      "content": "Giải phương trình $2^x=8$",
+      "choices": [
+        "x=1",
+        "x=2",
+        "x=3",
+        "x=4"
+      ],
+      "answer": 3,
+      "explanation": "Vì $2^3=8$"
+    }
+  ]
+}
