@@ -60,3 +60,47 @@ class MCQRule:
                 ))
 
         return errors
+    
+    def validate_mcq(sec, filename, sec_path):
+        errors = []
+
+        for qi, q in enumerate(sec["questions"]):
+            qpath = f"{sec_path}.questions[{qi}]"
+
+            # choices must be array of strings
+            if not isinstance(q.get("choices"), list):
+                errors.append(make_error(
+                    code="INVALID_FIELD",
+                    file=filename,
+                    path=f"{qpath}.choices",
+                    message="choices must be an array"
+                ))
+                continue
+
+            if not all(isinstance(c, str) for c in q["choices"]):
+                errors.append(make_error(
+                    code="INVALID_FIELD",
+                    file=filename,
+                    path=f"{qpath}.choices",
+                    message="each choice must be a string"
+                ))
+
+            # correct must be integer index
+            correct = q.get("correct")
+            if not isinstance(correct, int):
+                errors.append(make_error(
+                    code="INVALID_FIELD",
+                    file=filename,
+                    path=f"{qpath}.correct",
+                    message="correct must be an integer index"
+                ))
+            elif not (0 <= correct < len(q["choices"])):
+                errors.append(make_error(
+                    code="OUT_OF_RANGE",
+                    file=filename,
+                    path=f"{qpath}.correct",
+                    message="correct index out of range"
+                ))
+
+        return errors
+
