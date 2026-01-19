@@ -8,23 +8,26 @@ on:
         required: true
 
       enable_ai_revise:
-        description: "Enable AI revise"
+        description: "Enable AI revise when validation fails"
         required: false
         default: "false"
-
 
 jobs:
   exam-pipeline:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - run: pip install jsonschema
+      - name: Install dependencies
+        run: |
+          pip install jsonschema
 
       # ===============================
       # STEP 0 – INGEST RAW EXAM
@@ -38,10 +41,10 @@ jobs:
           echo "Raw exam UID: $uid"
 
       # ===============================
-      # STEP 1 – VALIDATE
+      # STEP 1 – VALIDATE (FIRST PASS)
       # ===============================
-      - name: Validate exam
-        id: validate
+      - name: Validate exam (initial)
+        id: validate_initial
         run: |
           python tools/engine/exams/step2_validation/exam_validate.py \
             "${{ steps.ingest.outputs.raw_exam_uid }}"
@@ -50,41 +53,68 @@ jobs:
       # OPTIONAL AI REVISE
       # ===============================
       - name: AI Revise
-        if: inputs.enable_ai_revise == 'true'
+        id: ai_revise
+        if: |
+          inputs.enable_ai_revise == 'true' &&
+          steps.validate_initial.outputs.result == 'FAILED'
         run: |
           python tools/engine/exams/step2_validation/exam_revise.py \
             "${{ steps.ingest.outputs.raw_exam_uid }}"
 
-      - name: Re-Validate
-        if: inputs.enable_ai_revise == 'true'
+      # ===============================
+      # STEP 2 – RE-VALIDATE (AFTER AI)
+      # ===============================
+      - name: Validate exam (after AI revise)
+        id: validate_after_ai
+        if: |
+          inputs.enable_ai_revise == 'true' &&
+          steps.validate_initial.outputs.result == 'FAILED'
         run: |
           python tools/engine/exams/step2_validation/exam_validate.py \
             "${{ steps.ingest.outputs.raw_exam_uid }}"
 
       # ===============================
-      # STEP 3 – SAVE DB
+      # STEP 3 – SAVE TO SCHOOL.DB
       # ===============================
       - name: Save to school.db
+        if: |
+          steps.validate_initial.outputs.result == 'PASSED' ||
+          steps.validate_after_ai.outputs.result == 'PASSED'
         run: |
           python tools/engine/exams/step3_save_to_database/save_to_school_db.py \
             "${{ steps.ingest.outputs.raw_exam_uid }}"
 
-
       # ===============================
-      # STEP 4 – LaTeX
+      # STEP 4 – EXPORT LATEX
       # ===============================
       - name: Export LaTeX
-        if: contains(steps.validate.outputs.result, 'PASS')
+        if: |
+          steps.validate_initial.outputs.result == 'PASSED' ||
+          steps.validate_after_ai.outputs.result == 'PASSED'
         run: |
           python tools/engine/exams/step4_publish_latex/exam_to_latex.py \
-            "${{ inputs.raw_exam_uid }}"
+            "${{ steps.ingest.outputs.raw_exam_uid }}"
 
-    # ===============================
-    # 8. Upload Artifact
-    # ===============================
+      # ===============================
+      # STEP 5 – BUILD PDF
+      # ===============================
+      - name: Build PDF
+        if: |
+          steps.validate_initial.outputs.result == 'PASSED' ||
+          steps.validate_after_ai.outputs.result == 'PASSED'
+        run: |
+          python tools/engine/exams/step5_publish_pdf/latex_to_pdf.py \
+            "${{ steps.ingest.outputs.raw_exam_uid }}"
+
+      # ===============================
+      # UPLOAD ARTIFACT
+      # ===============================
       - name: Upload Exam PDF
+        if: |
+          steps.validate_initial.outputs.result == 'PASSED' ||
+          steps.validate_after_ai.outputs.result == 'PASSED'
         uses: actions/upload-artifact@v4
         with:
           name: exam-pdf
-          path: exam.pdf
-
+          path: |
+            exams/**/export/*.pdf
