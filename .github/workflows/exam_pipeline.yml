@@ -3,25 +3,6 @@ name: Exam Pipeline (End-to-End)
 on:
   workflow_dispatch:
     inputs:
-      raw_exam_uid:
-        description: "Raw exam UID"
-        required: true
-
-      enable_ai_revise:
-        description: "Enable AI revise if validation fails"
-        required: false
-        default: "false"
-
-      max_revise:
-        description: "Max revise attempts"
-        required: false
-        default: "1"
-
-name: Exam Pipeline (End-to-End)
-
-on:
-  workflow_dispatch:
-    inputs:
       raw_exam_path:
         description: "Path to raw_exam.json"
         required: true
