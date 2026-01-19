@@ -3,13 +3,34 @@ name: Exam Pipeline (End-to-End)
 on:
   workflow_dispatch:
     inputs:
+      raw_exam_uid:
+        description: "Raw exam UID"
+        required: true
+
+      enable_ai_revise:
+        description: "Enable AI revise if validation fails"
+        required: false
+        default: "false"
+
+      max_revise:
+        description: "Max revise attempts"
+        required: false
+        default: "1"
+
+name: Exam Pipeline (End-to-End)
+
+on:
+  workflow_dispatch:
+    inputs:
       raw_exam_path:
         description: "Path to raw_exam.json"
         required: true
 
       enable_ai_revise:
         description: "Enable AI revise"
+        required: false
         default: "false"
+
 
 jobs:
   exam-pipeline:
@@ -66,6 +87,16 @@ jobs:
         run: |
           python tools/engine/exams/step3_save_to_database/save_to_school_db.py \
             "${{ steps.ingest.outputs.raw_exam_uid }}"
+
+
+      # ===============================
+      # STEP 4 – LaTeX
+      # ===============================
+      - name: Export LaTeX
+        if: contains(steps.validate.outputs.result, 'PASS')
+        run: |
+          python tools/engine/exams/step4_publish_latex/exam_to_latex.py \
+            "${{ inputs.raw_exam_uid }}"
 
     # ===============================
     # 8. Upload Artifact
