@@ -104,7 +104,7 @@ class MCQRule:
 
     #     return errors
 
-    def validate(sec, filename, sec_path):
+    def validate(self, sec, filename, sec_path):
         errors = []
 
         questions = sec.get("questions", [])

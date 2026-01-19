@@ -1,0 +1,84 @@
+name: Exam Pipeline (End-to-End)
+
+on:
+  workflow_dispatch:
+    inputs:
+      raw_exam_uid:
+        description: "Raw exam UID"
+        required: true
+
+      enable_ai_revise:
+        description: "Enable AI revise if validation fails"
+        required: false
+        default: "false"
+
+      max_revise:
+        description: "Max revise attempts"
+        required: false
+        default: "1"
+
+jobs:
+  exam-pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install jsonschema
+
+      # ===============================
+      # STEP 2 – VALIDATION
+      # ===============================
+      - name: Validate exam
+        id: validate
+        run: |
+          result=$(python tools/engine/exams/step2_validation/exam_validate.py \
+            "${{ inputs.raw_exam_uid }}")
+          echo "$result"
+          echo "result=$result" >> $GITHUB_OUTPUT
+
+      # ===============================
+      # OPTIONAL AI REVISE
+      # ===============================
+      - name: AI Revise (manual enabled)
+        if: |
+          contains(steps.validate.outputs.result, 'FAIL_SOFT') &&
+          inputs.enable_ai_revise == 'true'
+        run: |
+          echo "🔧 AI revise enabled"
+          python tools/engine/exams/step2_validation/exam_revise.py \
+            "${{ inputs.raw_exam_uid }}"
+
+      - name: Re-Validate after revise
+        if: |
+          contains(steps.validate.outputs.result, 'FAIL_SOFT') &&
+          inputs.enable_ai_revise == 'true'
+        run: |
+          python tools/engine/exams/step2_validation/exam_validate.py \
+            "${{ inputs.raw_exam_uid }}"
+
+      # ===============================
+      # STEP 3 – SAVE TO SCHOOL.DB
+      # ===============================
+      - name: Save to school.db
+        if: contains(steps.validate.outputs.result, 'PASS')
+        run: |
+          python tools/engine/exams/step3_save_to_database/save_to_school_db.py \
+            "${{ inputs.raw_exam_uid }}"
+
+      # ===============================
+      # STEP 4 – LaTeX
+      # ===============================
+      - name: Export LaTeX
+        if: contains(steps.validate.outputs.result, 'PASS')
+        run: |
+          python tools/engine/exams/step4_publish_latex/exam_to_latex.py \
+            "${{ inputs.raw_exam_uid }}"
