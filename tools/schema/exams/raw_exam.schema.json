@@ -3,6 +3,8 @@
   "title": "Raw Exam Schema",
   "type": "object",
   "required": ["exam"],
+  "additionalProperties": false,
+
   "properties": {
     "exam": {
       "type": "object",
@@ -14,21 +16,27 @@
         "duration",
         "questions"
       ],
+      "additionalProperties": false,
+
       "properties": {
         "title": { "type": "string" },
         "subject": { "type": "string" },
-        "grade": { "type": "integer" },
+        "grade": { "type": "integer", "minimum": 1 },
         "lesson_code": { "type": "string" },
-        "duration": { "type": "integer" },
+        "duration": { "type": "integer", "minimum": 1 },
 
         "questions": {
           "type": "array",
           "minItems": 1,
+
           "items": {
             "type": "object",
-            "required": ["id", "type", "content"],
+            "required": ["id", "type", "content", "score"],
+            "additionalProperties": false,
+
             "properties": {
               "id": { "type": "string" },
+
               "type": {
                 "type": "string",
                 "enum": [
@@ -39,6 +47,7 @@
                   "advanceessq"
                 ]
               },
+
               "content": { "type": "string" },
 
               "difficulty": {
@@ -58,25 +67,91 @@
                 ]
               },
 
-              "score": { "type": "number" },
+              "score": { "type": "number", "minimum": 0 },
 
               "choices": {
                 "type": "array",
+                "minItems": 2,
                 "items": {
                   "type": "object",
-                  "required": ["label", "content"],
+                  "required": ["label", "content", "is_correct"],
+                  "additionalProperties": false,
+
                   "properties": {
-                    "label": { "type": ["string", "boolean"] },
+                    "label": {
+                      "type": "string",
+                      "enum": ["A", "B", "C", "D", "True", "False"]
+                    },
                     "content": { "type": "string" },
                     "is_correct": { "type": "boolean" }
                   }
                 }
               },
 
-              "answer_key": {},
+              "answer_key": {
+                "oneOf": [
+                  { "type": "string" },
+                  { "type": "boolean" }
+                ]
+              },
+
               "explanation": { "type": "string" },
+
               "rubric": { "type": "string" }
-            }
+            },
+
+            "allOf": [
+              {
+                "if": {
+                  "properties": { "type": { "const": "mcq" } }
+                },
+                "then": {
+                  "required": ["choices", "answer_key"],
+                  "properties": {
+                    "choices": {
+                      "minItems": 4,
+                      "maxItems": 4
+                    },
+                    "answer_key": { "type": "string" }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": { "type": { "const": "tfq" } }
+                },
+                "then": {
+                  "required": ["choices", "answer_key"],
+                  "properties": {
+                    "choices": {
+                      "minItems": 2,
+                      "maxItems": 2
+                    },
+                    "answer_key": { "type": "boolean" }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": { "type": { "const": "shortAns" } }
+                },
+                "then": {
+                  "required": ["answer_key"],
+                  "not": { "required": ["choices"] }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "type": { "enum": ["essayq", "advanceessq"] }
+                  }
+                },
+                "then": {
+                  "required": ["rubric"],
+                  "not": { "required": ["choices", "answer_key"] }
+                }
+              }
+            ]
           }
         }
       }
