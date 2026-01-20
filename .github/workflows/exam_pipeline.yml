@@ -39,7 +39,7 @@ jobs:
             "${{ inputs.raw_exam_path }}" ui)
           echo "raw_exam_uid=$uid" >> $GITHUB_OUTPUT
           echo "Raw exam UID: $uid"
-          
+
       - name: Verify raw exam exists
         run: |
           sqlite3 data/raw_database.db \
@@ -112,8 +112,14 @@ jobs:
             "${{ steps.ingest.outputs.raw_exam_uid }}"
 
       # ===============================
-      # UPLOAD ARTIFACT
+      # UPLOAD ARTIFACTS
       # ===============================
+      - name: Upload raw database
+        uses: actions/upload-artifact@v4
+        with:
+          name: raw-database
+          path: data/raw_database.db
+
       - name: Upload Exam PDF
         if: |
           steps.validate_initial.outputs.result == 'PASSED' ||
@@ -121,5 +127,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: exam-pdf
-          path: |
-            exams/**/export/*.pdf
+          path: exams/**/export/*.pdf
+
