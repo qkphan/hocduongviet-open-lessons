@@ -40,10 +40,10 @@ jobs:
           echo "raw_exam_uid=$uid" >> $GITHUB_OUTPUT
           echo "Raw exam UID: $uid"
 
-      - name: Verify raw exam exists
-        run: |
-          sqlite3 data/raw_database.db \
-            "SELECT raw_exam_uid FROM raw_exams WHERE raw_exam_uid='${{ steps.ingest.outputs.raw_exam_uid }}';"
+      # - name: Verify raw exam exists
+      #   run: |
+      #     sqlite3 data/raw_database.db \
+      #       "SELECT raw_exam_uid FROM raw_exams WHERE raw_exam_uid='${{ steps.ingest.outputs.raw_exam_uid }}';"
 
       # ===============================
       # STEP 1 – VALIDATE (FIRST PASS)

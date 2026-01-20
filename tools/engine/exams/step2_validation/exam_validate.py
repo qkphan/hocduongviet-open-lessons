@@ -8,7 +8,7 @@ from jsonschema import validate, ValidationError
 # CONFIG
 # =====================================================
 RAW_DB_PATH = "data/raw_database.db"
-EXAM_SCHEMA_PATH = "tools/schema/exams/exam_schema.json"
+EXAM_SCHEMA_PATH = "tools/schema/exams/raw_exam.schema.json"
 
 MAX_REVISION_DEFAULT = 2
 
