@@ -19,10 +19,10 @@
       "additionalProperties": false,
 
       "properties": {
-        "title": { "type": "string" },
-        "subject": { "type": "string" },
+        "title": { "type": "string", "minLength": 1 },
+        "subject": { "type": "string", "minLength": 1 },
         "grade": { "type": "integer", "minimum": 1 },
-        "lesson_code": { "type": "string" },
+        "lesson_code": { "type": "string", "minLength": 1 },
         "duration": { "type": "integer", "minimum": 1 },
 
         "questions": {
@@ -35,7 +35,7 @@
             "additionalProperties": false,
 
             "properties": {
-              "id": { "type": "string" },
+              "id": { "type": "string", "minLength": 1 },
 
               "type": {
                 "type": "string",
@@ -48,7 +48,7 @@
                 ]
               },
 
-              "content": { "type": "string" },
+              "content": { "type": "string", "minLength": 1 },
 
               "difficulty": {
                 "type": "string",
@@ -67,11 +67,15 @@
                 ]
               },
 
-              "score": { "type": "number", "minimum": 0 },
+              "score": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
 
               "choices": {
                 "type": "array",
                 "minItems": 2,
+
                 "items": {
                   "type": "object",
                   "required": ["label", "content", "is_correct"],
@@ -80,10 +84,15 @@
                   "properties": {
                     "label": {
                       "type": "string",
-                      "enum": ["A", "B", "C", "D", "True", "False"]
+                      "minLength": 1
                     },
-                    "content": { "type": "string" },
-                    "is_correct": { "type": "boolean" }
+                    "content": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "is_correct": {
+                      "type": "boolean"
+                    }
                   }
                 }
               },
@@ -95,40 +104,30 @@
                 ]
               },
 
-              "explanation": { "type": "string" },
+              "explanation": {
+                "type": "string"
+              },
 
-              "rubric": { "type": "string" }
+              "rubric": {
+                "type": "string"
+              }
             },
 
             "allOf": [
               {
                 "if": {
-                  "properties": { "type": { "const": "mcq" } }
+                  "properties": { "type": { "enum": ["mcq", "tfq"] } }
                 },
                 "then": {
-                  "required": ["choices", "answer_key"],
-                  "properties": {
-                    "choices": {
-                      "minItems": 4,
-                      "maxItems": 4
-                    },
-                    "answer_key": { "type": "string" }
-                  }
+                  "required": ["choices", "answer_key"]
                 }
               },
               {
                 "if": {
-                  "properties": { "type": { "const": "tfq" } }
+                  "properties": { "type": { "enum": ["essayq", "advanceessq"] } }
                 },
                 "then": {
-                  "required": ["choices", "answer_key"],
-                  "properties": {
-                    "choices": {
-                      "minItems": 2,
-                      "maxItems": 2
-                    },
-                    "answer_key": { "type": "boolean" }
-                  }
+                  "required": ["rubric"]
                 }
               },
               {
@@ -136,19 +135,7 @@
                   "properties": { "type": { "const": "shortAns" } }
                 },
                 "then": {
-                  "required": ["answer_key"],
-                  "not": { "required": ["choices"] }
-                }
-              },
-              {
-                "if": {
-                  "properties": {
-                    "type": { "enum": ["essayq", "advanceessq"] }
-                  }
-                },
-                "then": {
-                  "required": ["rubric"],
-                  "not": { "required": ["choices", "answer_key"] }
+                  "required": ["answer_key"]
                 }
               }
             ]
