@@ -283,7 +283,7 @@ def validate_pipeline(raw_exam_uid):
 
         log_event(conn, raw_exam_uid, "PASSED", "Exam validated successfully")
         conn.commit()
-        return "PASS"
+        return "PASSED"
 
     finally:
         conn.close()
