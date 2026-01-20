@@ -1,0 +1,319 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Standard Exam Schema (v2)",
+  "type": "object",
+  "required": ["metadata", "config", "sections"],
+  "additionalProperties": false,
+
+  "properties": {
+    "metadata": { "$ref": "#/definitions/metadata" },
+    "config": { "$ref": "#/definitions/config" },
+    "sections": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/section" }
+    }
+  },
+
+  "definitions": {
+    /* =====================================================
+       METADATA – ĐỊNH HƯỚNG ĐỀ THI (BẮT BUỘC exam_id)
+       ===================================================== */
+    "metadata": {
+      "type": "object",
+      "required": ["exam_id", "title", "subject", "grade", "duration"],
+      "additionalProperties": false,
+
+      "properties": {
+        "exam_id": {
+          "type": "string",
+          "pattern": "^EXAM_[A-Z0-9_]+$",
+          "description": "UID duy nhất của đề thi"
+        },
+
+        "title": { "type": "string", "minLength": 3 },
+        "subject": { "type": "string" },
+        "grade": { "type": "integer", "minimum": 1, "maximum": 12 },
+        "duration": {
+          "type": "integer",
+          "minimum": 5,
+          "description": "Thời gian làm bài (phút)"
+        },
+
+        "author": { "type": "string" },
+        "version": { "type": "string" },
+
+        "content_domains": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+
+        "target_competencies": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+
+        "cognitive_levels": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/cognitive_level" }
+        },
+
+        "total_points": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Tổng điểm dự kiến (validate ở tầng engine)"
+        }
+      }
+    },
+
+    /* =====================================================
+       CONFIG – CẤU HÌNH SỬ DỤNG
+       ===================================================== */
+    "config": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "assessment": {
+          "type": "object",
+          "properties": {
+            "shuffle_sections": { "type": "boolean", "default": false },
+            "shuffle_questions": { "type": "boolean", "default": false },
+            "shuffle_choices": { "type": "boolean", "default": false }
+          }
+        },
+        "presentation": {
+          "type": "object",
+          "properties": {
+            "show_points": { "type": "boolean", "default": true }
+          }
+        }
+      }
+    },
+
+    /* =====================================================
+       SECTION – RÀNG BUỘC THEO TYPE
+       ===================================================== */
+    "section": {
+      "oneOf": [
+        { "$ref": "#/definitions/section_mcq" },
+        { "$ref": "#/definitions/section_tfq" },
+        { "$ref": "#/definitions/section_short_answer" },
+        { "$ref": "#/definitions/section_essay" }
+      ]
+    },
+
+    "section_base": {
+      "type": "object",
+      "required": ["id", "type", "title", "questions"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "questions": {
+          "type": "array",
+          "minItems": 1
+        }
+      }
+    },
+
+    /* ================= MCQ ================= */
+    "section_mcq": {
+      "allOf": [
+        { "$ref": "#/definitions/section_base" },
+        {
+          "properties": {
+            "type": { "const": "mcq" },
+            "questions": {
+              "items": { "$ref": "#/definitions/question_mcq" }
+            }
+          }
+        }
+      ]
+    },
+
+    /* ================= TFQ ================= */
+    "section_tfq": {
+      "allOf": [
+        { "$ref": "#/definitions/section_base" },
+        {
+          "properties": {
+            "type": { "const": "tfq" },
+            "questions": {
+              "items": { "$ref": "#/definitions/question_tfq" }
+            }
+          }
+        }
+      ]
+    },
+
+    /* ============ SHORT ANSWER ============ */
+    "section_short_answer": {
+      "allOf": [
+        { "$ref": "#/definitions/section_base" },
+        {
+          "properties": {
+            "type": { "const": "short_answer" },
+            "questions": {
+              "items": { "$ref": "#/definitions/question_short_answer" }
+            }
+          }
+        }
+      ]
+    },
+
+    /* ================= ESSAY ================= */
+    "section_essay": {
+      "allOf": [
+        { "$ref": "#/definitions/section_base" },
+        {
+          "properties": {
+            "type": { "const": "essay" },
+            "questions": {
+              "items": { "$ref": "#/definitions/question_essay" }
+            }
+          }
+        }
+      ]
+    },
+
+    /* =====================================================
+       COMMON QUESTION FIELDS
+       ===================================================== */
+    "question_base": {
+      "type": "object",
+      "required": ["id", "content", "points"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "content": { "type": "string", "minLength": 5 },
+        "points": { "type": "number", "minimum": 0 },
+
+        "content_domain": { "type": "string" },
+        "competencies": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "cognitive_level": { "$ref": "#/definitions/cognitive_level" }
+      }
+    },
+
+    /* ================= MCQ QUESTION ================= */
+    "question_mcq": {
+      "allOf": [
+        { "$ref": "#/definitions/question_base" },
+        {
+          "required": ["choices"],
+          "properties": {
+            "choices": {
+              "type": "array",
+              "minItems": 2,
+              "items": { "$ref": "#/definitions/choice" }
+            }
+          }
+        }
+      ]
+    },
+
+    /* ================= TFQ QUESTION ================= */
+    "question_tfq": {
+      "allOf": [
+        { "$ref": "#/definitions/question_base" },
+        {
+          "required": ["sub_questions"],
+          "properties": {
+            "sub_questions": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "$ref": "#/definitions/sub_question" }
+            }
+          }
+        }
+      ]
+    },
+
+    /* ============ SHORT ANSWER QUESTION ============ */
+    "question_short_answer": {
+      "allOf": [
+        { "$ref": "#/definitions/question_base" },
+        {
+          "required": ["answer"],
+          "properties": {
+            "answer": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Danh sách đáp án chấp nhận được"
+            }
+          }
+        }
+      ]
+    },
+
+    /* ================= ESSAY QUESTION ================= */
+    "question_essay": {
+      "allOf": [
+        { "$ref": "#/definitions/question_base" },
+        {
+          "required": ["rubric"],
+          "properties": {
+            "rubric": {
+              "type": "object",
+              "required": ["criteria"],
+              "properties": {
+                "criteria": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["description", "points"],
+                    "properties": {
+                      "description": { "type": "string" },
+                      "points": { "type": "number" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+
+    /* =====================================================
+       ATOMIC DEFINITIONS
+       ===================================================== */
+    "choice": {
+      "type": "object",
+      "required": ["id", "content", "is_correct"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "content": { "type": "string" },
+        "is_correct": { "type": "boolean" }
+      }
+    },
+
+    "sub_question": {
+      "type": "object",
+      "required": ["id", "content", "is_correct"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "content": { "type": "string" },
+        "is_correct": { "type": "boolean" }
+      }
+    },
+
+    "cognitive_level": {
+      "type": "string",
+      "enum": [
+        "remember",
+        "understand",
+        "apply",
+        "analyze",
+        "evaluate",
+        "create"
+      ]
+    }
+  }
+}

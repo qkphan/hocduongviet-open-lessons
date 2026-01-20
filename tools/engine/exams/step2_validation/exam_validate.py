@@ -91,9 +91,10 @@ def schema_validate_exam(exam_json, schema):
         return False, str(e)
 
 
-def rule_validate_exam_old(exam_json):
+
+def rule_validate_exam(exam_json):
     """
-    Hard-coded rule validation (step 2.2)
+    Rule-level validation on top of schema v2
     Return: (pass: bool, severity: SOFT|HARD, message)
     """
 
@@ -105,53 +106,91 @@ def rule_validate_exam_old(exam_json):
         return False, "HARD", "No sections defined"
 
     for sec in sections:
+        sec_id = sec.get("id")
         sec_type = sec.get("type")
         questions = sec.get("questions", [])
 
         if not questions:
-            errors.append(f"Empty section: {sec_type}")
+            errors.append(f"Section {sec_id} has no questions")
+            continue
 
+        # ================= MCQ =================
         if sec_type == "mcq":
             for q in questions:
+                qid = q.get("id")
                 choices = q.get("choices", [])
-                correct = [c for c in choices if c.get("is_correct")]
+
+                correct = [c for c in choices if c.get("is_correct") is True]
 
                 if len(correct) != 1:
                     errors.append(
-                        f"MCQ must have exactly 1 correct answer: {q.get('id')}"
+                        f"MCQ question {qid} must have exactly 1 correct choice"
                     )
 
+        # ================= TFQ =================
+        elif sec_type == "tfq":
+            for q in questions:
+                qid = q.get("id")
+                subs = q.get("sub_questions", [])
+
+                if not subs:
+                    errors.append(f"TFQ question {qid} has no sub_questions")
+                    continue
+
+                for sq in subs:
+                    if "is_correct" not in sq:
+                        errors.append(
+                            f"TFQ sub_question {sq.get('id')} in {qid} missing is_correct"
+                        )
+
+        # ================= SHORT ANSWER =================
+        elif sec_type == "short_answer":
+            for q in questions:
+                qid = q.get("id")
+                answers = q.get("answer", [])
+
+                if not answers:
+                    errors.append(
+                        f"Short answer question {qid} must have at least 1 accepted answer"
+                    )
+
+        # ================= ESSAY =================
+        elif sec_type == "essay":
+            for q in questions:
+                qid = q.get("id")
+                rubric = q.get("rubric")
+
+                if not rubric or not rubric.get("criteria"):
+                    errors.append(
+                        f"Essay question {qid} must define rubric criteria"
+                    )
+
+                else:
+                    total = 0
+                    for c in rubric["criteria"]:
+                        total += c.get("points", 0)
+
+                    if total <= 0:
+                        errors.append(
+                            f"Essay question {qid} rubric total points must be > 0"
+                        )
+
+        else:
+            errors.append(f"Unknown section type: {sec_type}")
+
     if not errors:
         return True, None, None
 
-    # Severity heuristic
-    if any("exactly 1 correct" in e for e in errors):
-        return False, "SOFT", "; ".join(errors)
+    # Heuristic:
+    # - content logic → SOFT
+    # - structure impossible → HARD
+    severity = "SOFT"
 
-    return False, "HARD", "; ".join(errors)
+    if any("Unknown section type" in e or "No sections" in e for e in errors):
+        severity = "HARD"
 
-def rule_validate_exam(exam_json):
-    exam = exam_json["exam"]
-    questions = exam["questions"]
+    return False, severity, "; ".join(errors)
 
-    errors = []
-
-    for q in questions:
-        qtype = q["type"]
-
-        if qtype in ("mcq", "tfq"):
-            choices = q.get("choices", [])
-            correct = [c for c in choices if c.get("is_correct")]
-
-            if len(correct) != 1:
-                errors.append(
-                    f"{q['id']}: must have exactly 1 correct choice"
-                )
-
-    if not errors:
-        return True, None, None
-
-    return False, "SOFT", "; ".join(errors)
 
 # =====================================================
 # MAIN PIPELINE
