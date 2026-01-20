@@ -1,6 +1,6 @@
 import json
 import sqlite3
-import sys
+import sys, os
 from datetime import datetime
 from jsonschema import validate, ValidationError
 
@@ -300,3 +300,10 @@ if __name__ == "__main__":
     raw_exam_uid = sys.argv[1]
     result = validate_pipeline(raw_exam_uid)
     print(f"[VALIDATION RESULT] {raw_exam_uid}: {result}")
+
+    print(f"[VALIDATION RESULT] {raw_exam_uid}: {result}")
+
+    github_output = os.environ.get("GITHUB_OUTPUT")
+    if github_output:
+        with open(github_output, "a") as f:
+            f.write(f"result={result}\n")
