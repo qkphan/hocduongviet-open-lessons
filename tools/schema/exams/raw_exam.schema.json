@@ -1,146 +1,152 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Raw Exam Schema",
+  "title": "Raw Exam Schema (Ingest Layer)",
   "type": "object",
-  "required": ["exam"],
+  "required": ["schema_version", "exam_id", "metadata", "structure", "questions"],
   "additionalProperties": false,
 
   "properties": {
-    "exam": {
+    "schema_version": {
+      "type": "string"
+    },
+
+    "exam_id": {
+      "type": "string",
+      "minLength": 3
+    },
+
+    "metadata": {
       "type": "object",
       "required": [
         "title",
         "subject",
         "grade",
-        "lesson_code",
-        "duration",
-        "questions"
+        "topic",
+        "exam_type",
+        "time_minutes",
+        "total_questions",
+        "created_by",
+        "language"
       ],
       "additionalProperties": false,
-
       "properties": {
-        "title": { "type": "string", "minLength": 1 },
-        "subject": { "type": "string", "minLength": 1 },
-        "grade": { "type": "integer", "minimum": 1 },
-        "lesson_code": { "type": "string", "minLength": 1 },
-        "duration": { "type": "integer", "minimum": 1 },
+        "title": { "type": "string" },
+        "subject": { "type": "string" },
+        "grade": { "type": "integer", "minimum": 1, "maximum": 12 },
+        "topic": { "type": "string" },
+        "exam_type": { "type": "string" },
+        "time_minutes": { "type": "integer", "minimum": 1 },
+        "total_questions": { "type": "integer", "minimum": 1 },
+        "created_by": { "type": "string" },
+        "language": { "type": "string" }
+      }
+    },
 
-        "questions": {
+    "structure": {
+      "type": "object",
+      "required": ["sections"],
+      "additionalProperties": false,
+      "properties": {
+        "sections": {
           "type": "array",
           "minItems": 1,
-
           "items": {
             "type": "object",
-            "required": ["id", "type", "content", "score"],
+            "required": ["section_id", "title", "questions"],
             "additionalProperties": false,
-
             "properties": {
-              "id": { "type": "string", "minLength": 1 },
-
-              "type": {
-                "type": "string",
-                "enum": [
-                  "mcq",
-                  "tfq",
-                  "shortAns",
-                  "essayq",
-                  "advanceessq"
-                ]
-              },
-
-              "content": { "type": "string", "minLength": 1 },
-
-              "difficulty": {
-                "type": "string",
-                "enum": ["easy", "medium", "hard"]
-              },
-
-              "cognitive_level": {
-                "type": "string",
-                "enum": [
-                  "remember",
-                  "understand",
-                  "apply",
-                  "analyze",
-                  "evaluate",
-                  "create"
-                ]
-              },
-
-              "score": {
-                "type": "number",
-                "exclusiveMinimum": 0
-              },
-
-              "choices": {
+              "section_id": { "type": "string" },
+              "title": { "type": "string" },
+              "description": { "type": "string" },
+              "questions": {
                 "type": "array",
-                "minItems": 2,
-
-                "items": {
-                  "type": "object",
-                  "required": ["label", "content", "is_correct"],
-                  "additionalProperties": false,
-
-                  "properties": {
-                    "label": {
-                      "type": "string",
-                      "minLength": 1
-                    },
-                    "content": {
-                      "type": "string",
-                      "minLength": 1
-                    },
-                    "is_correct": {
-                      "type": "boolean"
-                    }
-                  }
-                }
-              },
-
-              "answer_key": {
-                "oneOf": [
-                  { "type": "string" },
-                  { "type": "boolean" }
-                ]
-              },
-
-              "explanation": {
-                "type": "string"
-              },
-
-              "rubric": {
-                "type": "string"
+                "items": { "type": "string" }
               }
-            },
-
-            "allOf": [
-              {
-                "if": {
-                  "properties": { "type": { "enum": ["mcq", "tfq"] } }
-                },
-                "then": {
-                  "required": ["choices", "answer_key"]
-                }
-              },
-              {
-                "if": {
-                  "properties": { "type": { "enum": ["essayq", "advanceessq"] } }
-                },
-                "then": {
-                  "required": ["rubric"]
-                }
-              },
-              {
-                "if": {
-                  "properties": { "type": { "const": "shortAns" } }
-                },
-                "then": {
-                  "required": ["answer_key"]
-                }
-              }
-            ]
+            }
           }
         }
+      }
+    },
+
+    "questions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "question_id",
+          "section_id",
+          "type",
+          "difficulty",
+          "content",
+          "choices",
+          "correct_answer",
+          "explanation",
+          "learning_objective"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "question_id": { "type": "string" },
+          "section_id": { "type": "string" },
+
+          "type": {
+            "type": "string",
+            "enum": ["multiple_choice"]
+          },
+
+          "difficulty": {
+            "type": "string",
+            "enum": ["easy", "medium", "hard"]
+          },
+
+          "content": {
+            "type": "string",
+            "minLength": 5
+          },
+
+          "choices": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "object",
+              "required": ["choice_id", "content"],
+              "additionalProperties": false,
+              "properties": {
+                "choice_id": {
+                  "type": "string",
+                  "enum": ["A", "B", "C", "D"]
+                },
+                "content": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          },
+
+          "correct_answer": {
+            "type": "string",
+            "enum": ["A", "B", "C", "D"]
+          },
+
+          "explanation": {
+            "type": "string",
+            "minLength": 5
+          },
+
+          "learning_objective": {
+            "type": "string",
+            "minLength": 3
+          }
+        }
+      }
+    },
+
+    "sections": {
+      "type": "array",
+      "description": "Optional – used by rule_validate_exam()",
+      "items": {
+        "type": "object"
       }
     }
   }
