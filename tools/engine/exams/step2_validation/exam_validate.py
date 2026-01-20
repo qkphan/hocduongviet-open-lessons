@@ -91,7 +91,7 @@ def schema_validate_exam(exam_json, schema):
         return False, str(e)
 
 
-def rule_validate_exam(exam_json):
+def rule_validate_exam_old(exam_json):
     """
     Hard-coded rule validation (step 2.2)
     Return: (pass: bool, severity: SOFT|HARD, message)
@@ -130,6 +130,28 @@ def rule_validate_exam(exam_json):
 
     return False, "HARD", "; ".join(errors)
 
+def rule_validate_exam(exam_json):
+    exam = exam_json["exam"]
+    questions = exam["questions"]
+
+    errors = []
+
+    for q in questions:
+        qtype = q["type"]
+
+        if qtype in ("mcq", "tfq"):
+            choices = q.get("choices", [])
+            correct = [c for c in choices if c.get("is_correct")]
+
+            if len(correct) != 1:
+                errors.append(
+                    f"{q['id']}: must have exactly 1 correct choice"
+                )
+
+    if not errors:
+        return True, None, None
+
+    return False, "SOFT", "; ".join(errors)
 
 # =====================================================
 # MAIN PIPELINE
